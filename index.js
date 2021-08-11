@@ -7,7 +7,13 @@ class SortedList {
   }
 
   add(item) {
+    if (arguments.length > 1 || Array.isArray(item))
+      throw new Error('Add one number at a time');
     this.items.push(item);
+    this.items.sort((first, second) => {
+      if (first < second) return -1;
+      else if (first > second) return 1;
+    });
     this.items.sort((first, second) => {
       if (first < second) return -1;
       else if (first > second) return 1;
@@ -15,24 +21,52 @@ class SortedList {
   }
 
   get(pos) {
-    if (!typeof this.items.at(pos)) throw new Error('OutOfBounds');
-    else return this.items.at(pos);
+    if (typeof this.items.at(pos) === 'undefined') {
+      throw new Error('OutOfBounds');
+    } else {
+      return this.items.at(pos);
+    }
   }
 
-  max() {}
+  max() {
+    if (!this.items.length) throw new Error('EmptySortedList');
+    else {
+      return this.items.reduce((accumulator, currentValue) => {
+        if (currentValue > accumulator) return currentValue;
+        else return accumulator;
+      });
+    }
+  }
 
-  min() {}
+  min() {
+    if (!this.items.length) throw new Error('EmptySortedList');
+    else {
+      return this.items.reduce((accumulator, currentValue) => {
+        if (currentValue < accumulator) return currentValue;
+        else return accumulator;
+      });
+    }
+  }
 
-  sum() {}
+  sum() {
+    if (!this.items.length) return 0;
+    else {
+      return this.items.reduce(
+        (accumulator, currentValue) => accumulator + currentValue
+      );
+    }
+  }
 
-  avg() {}
+  avg() {
+    if (!this.items.length) throw new Error('EmptySortedList');
+    else {
+      return (
+        this.items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue
+        ) / this.items.length
+      );
+    }
+  }
 }
-
-const myList = new SortedList([3, 1, 4, 2, 7]);
-myList.add(10);
-let value = myList.get(1);
-
-console.log(myList.items);
-console.log(value);
 
 module.exports = SortedList;
